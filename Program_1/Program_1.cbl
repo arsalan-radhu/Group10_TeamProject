@@ -109,10 +109,10 @@
       *This header will display the author(s) of this program and the
       *title for this team project.
        01 ws-heading1-name-line.
-         05 filler                     pic x(7) value "Author:".
-         05 filler                     pic x(18) value 
-           "Arsalan Arif Radhu".
-         05 filler                     pic x(1) value spaces.
+         05 filler                     pic x(8) value "Author:".
+         05 filler                     pic x(14) value 
+           "Arsalan Radhu".
+         05 filler                     pic x(4) value spaces.
          05 filler                     pic x(35) value
            "MAFD4202 - Team Project: Program #1".
 
@@ -219,6 +219,255 @@
          05 ws-total-invalid-records   pic 99 value 0.
          05 ws-total-valid-records     pic 99 value 0.
 
+       procedure division.
+       000-main.
+
+           move ws-false-const         to ws-eof-flag.
+
+           open input input-file,
+             output valid-file,
+             invalid-file,
+             invalid-report.
+
+           read input-file
+               at end
+                   move ws-true-const  to ws-eof-flag.
+
+           perform 100-output-headings.
+
+           perform 200-record-validation
+             until ws-eof-flag = ws-true-const.
+
+           perform 500-output-summary.
+
+           close input-file,
+             valid-file,
+             invalid-file.
+
+           stop run.
+
+       100-output-headings.
+
+           write invalid-report-line from ws-heading1-name-line.
+           write invalid-report-line
+             from ws-heading2-report-header-line
+             after advancing 1 line.
+           write invalid-report-line
+             from ws-heading4-invalid-report-line-1
+             after advancing 2 lines.
+           write invalid-report-line
+             from ws-heading4-invalid-report-line-2.
+           write invalid-report-line
+             from ws-heading4-invalid-report-line-3.
+
+       200-record-validation.
+
+      *    Reset detail flag.
+           move 0                      to ws-detail-flag.
+      *    Reset number of errors counter.
+           move 0                      to ws-num-of-errors-count.
+      *    Increment report number.
+           add 1                       to ws-record-number-count.
+      *    Increment total number of input records.
+           add 1                       to ws-input-record-count.
+
+      *    VALIDATION for Transaction Code.
+      *    Must be either 'S', 'R', or 'L'.
+           if not il-valid-transac-codes-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-1-const
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    VALIDATION for Transaction Amount.
+      *    Must be numeric.
+           if il-transaction-amount not numeric then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-2-const
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    VALIDATION for Payment Type.
+      *    Must be 'CA', 'CR', or 'DB'.
+           if not il-valid-pay-types-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-3-const
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    VALIDATION for Store Number.
+      *    Must be '01', '02', '03', '04', '05', or '12'.
+           if not il-valid-store-nums-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-4-const
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    VALIDATION for Invoice Number.
+      *    Invoice Number should be in format: '[XX]-000000'.
+           if not il-invoice-number-XX alphabetic then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-1
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    Invoice Number should be in format: 'XX[-]000000'.
+           if not il-invoice-number-dash-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-5
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    Invoice Number should be in format: 'XX-[000000]'.
+           if not il-invoice-number-000000 numeric then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-1
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    Must be 'A', 'B', 'C', 'D', or 'E'.
+           if not il-invoice-number-1-letter-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-2
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    Must be 'A', 'B', 'C', 'D', or 'E'.
+           if not il-invoice-number-2-letter-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-2
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    Two letters cannot be the same.
+           if il-invoice-number-duplicate-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-3
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    000000 must be >100000 and <900000.
+           if il-invoice-number-invalid-range-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-5-const-4
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           end-if.
+
+      *    VALIDATION for SKU Code.
+      *    Must not be blank.
+           if il-sku-code-blank-88 then
+
+               add 1                   to ws-num-of-errors-count
+               move ws-error-text-7-const-1
+                                       to ws-error-text
+               perform 200-output-invalid-data
+
+           else
+
+      *    Must be alphanumeric.
+               if not il-sku-code-valid-88 then
+
+                   add 1               to ws-num-of-errors-count
+                   move ws-error-text-7-const-2
+                                       to ws-error-text
+                   perform 200-output-invalid-data
+
+               end-if.
+
+           if ws-num-of-errors-count = 0 then
+
+               perform 400-output-valid-data
+
+           else
+
+      *        Increment invalid record counter.
+               add 1
+                                       to ws-invalid-record-count
+               move ws-invalid-record-count
+                                       to ws-tl-invalid-records
+
+           end-if
+
+           read input-file
+               at end
+                   move ws-true-const  to ws-eof-flag.
+
+       200-output-invalid-data.
+
+           add 1                       to ws-line-count.
+
+           move ws-record-number-count to ws-dl-report-number.
+           move input-line             to ws-dl-input-line.
+
+           if ws-detail-flag = 0
+               write invalid-report-line from ws-detail-line
+               move 1                  to ws-detail-flag
+
+      *            Move the record to invalid.dat.
+               write invalid-line from input-line
+
+           end-if.
+
+           write invalid-report-line from ws-error-message-line.
+
+       400-output-valid-data.
+
+      *    Increment valid record counter.
+           add 1                       to ws-valid-record-count.
+           move ws-valid-record-count
+                                       to ws-tl-valid-records.
+
+      *    Move the record to valid.dat.
+           write valid-line from input-line.
+
+       500-output-summary.
+
+           move ws-input-record-count
+                                       to ws-tl-total-records.
+
+      *    Output summary data.
+           write invalid-report-line
+             from ws-heading5-summary-header
+             after advancing 2 lines.
+           write invalid-report-line
+             from ws-heading5-summary-line-1.
+           write invalid-report-line
+             from ws-heading5-summary-line-2.
+           write invalid-report-line
+             from ws-heading5-summary-line-3.
        
 
        end program Program_1.
