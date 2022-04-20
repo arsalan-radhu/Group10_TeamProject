@@ -337,7 +337,7 @@
 		   move ws-zero to ws-page-records.
 
 	   300-calculate-transaction-amount.
-		   compute ws-calc-tax = ws-trans-percent *
+		   compute ws-calc-tax rounded = ws-trans-percent *
 			 il-transaction-amount.
 		   add ws-calc-tax to ws-total-tax-ow.
 
