@@ -133,7 +133,7 @@
             
 	   01 ws-column-heading-1.
 			05 filler				   pic x(2) value spaces.
-			05 filler                   pic x(6) value
+			05 filler                   pic x(9) value
 									   "Trans.".
 			05 filler				   pic x(3) value spaces.
 			05 filler				   pic x(6) value "Trans.".
@@ -143,18 +143,18 @@
 			05 filler				   pic x value spaces.
 			05 filler				   pic x(5) value 
                         "Store".
-			05 filler				   pic x(4) value spaces.
-			05 filler				   pic x(7) value "Invoice".
 			05 filler				   pic x(2) value spaces.
+			05 filler				   pic x(7) value "Invoice".
+			05 filler				   pic x(3) value spaces.
 			05 filler				   pic x(3) value "Sku".
-			05 filler				   pic x(14) value spaces.
+			05 filler				   pic x(15) value spaces.
 			05 filler				   pic x(3) value "Tax".
 			05 filler				   pic x(5) value spaces.
 
 	   01 ws-column-heading-2.
        		05 filler				   pic x(2) value spaces.
 			05 filler				   pic x(4) value "Code".
-			05 filler				   pic x(5) value spaces.
+			05 filler				   pic x(8) value spaces.
 			05 filler				   pic x(6) value 
                         "Amount".
 			05 filler				   pic x(4) value spaces.
@@ -162,13 +162,13 @@
 			05 filler				   pic x(4) value 
                         spaces.
 			05 filler				   pic x(6) value "Number".
-			05 filler				   pic x(3) value spaces.
+			05 filler				   pic x(1) value spaces.
 			05 filler				   pic x(6) value 
                        "Number".
-			05 filler				   pic x(3) value spaces.
+			05 filler				   pic x(4) value spaces.
 			05 filler				   pic x(4) value 
                        "Code".
-			05 filler				   pic x(13) value spaces.
+			05 filler				   pic x(14) value spaces.
 			05 filler				   pic x(5) value "Owing".
 			05 filler				   pic x(3) value 
                         spaces.
@@ -181,11 +181,11 @@
 			05 filler				                   pic x(8) value 
             spaces.
 			05 ws-dl-trans-amount	   pic $$,$$9.99.
-			05 filler				                   pic x(2) 
+			05 filler				                   pic x(6) 
             value
             spaces.
 			05 ws-dl-pay-type		       pic xx.
-			05 filler				                   pic x(6) value 
+			05 filler				                   pic x(4) value 
             spaces.
 			05 ws-dl-store-num		   pic xx.
 			05 filler				                   pic x(5) value 
@@ -255,9 +255,9 @@
 			05 filler				           pic x value "%".
                                                       
 	    01 ws-summary-line-7.
-			05 filler				           pic x(12) value 
-            "Credit  Card".
-			05 filler				           pic x(9) value spaces.
+			05 filler				           pic x(13) value 
+            "Credit  Card:".
+			05 filler				           pic x(8) value spaces.
 			05 ws-sm-credit-total
 													   pic zz9.
 			05 filler				           pic x(17) value spaces.
@@ -266,9 +266,9 @@
 			05 filler				           pic x value "%".
             
 	    01 ws-summary-line-8.
-			05 filler				           pic x(12) value
-               "Debit	Card".
-			05 filler				           pic x(9) value spaces.
+			05 filler				           pic x(13) value
+               "Debit	Card:".
+			05 filler				           pic x(8) value spaces.
 			05 ws-sm-debit-total
 													   pic zz9.
 			05 filler				           pic x(17) value spaces.
@@ -277,9 +277,9 @@
 			05 filler				           pic x value "%".
       
        01 ws-summary-line-9.
-			05 filler				           pic x(16) value 
-            "Total Tax  Owing".
-			05 filler				           pic x(5) value 
+			05 filler				           pic x(17) value 
+            "Total Tax  Owing:".
+			05 filler				           pic x(4) value 
             spaces.
 			05 ws-sm-total-tax	   pic $$$,$$9.99.
 
