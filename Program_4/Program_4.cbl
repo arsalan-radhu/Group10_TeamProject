@@ -20,10 +20,10 @@
        file section.
               
        fd returns
-              data record is return-data
-              record contains 80 characters.
+              data record is returns-data
+              record contains 36 characters.
       *
-       01 report-line pic x(80).
+       01 report-line pic x(36).
        
       *
        01 returns-data.
