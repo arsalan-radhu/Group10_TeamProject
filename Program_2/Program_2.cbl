@@ -359,12 +359,12 @@
              return-file,
              counts-and-control-total-report.
 
-           display ws-cash-count.
-           display ws-credit-count.
-           display ws-debit-count.
-           display ws-sale-and-layway-count.
+      *    display ws-cash-count.
+      *    display ws-credit-count.
+      *    display ws-debit-count.
+      *    display ws-sale-and-layway-count.
 
-           accept return-code.
+      *    accept return-code.
 
            stop run.
 
