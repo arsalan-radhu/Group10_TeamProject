@@ -64,8 +64,6 @@
        01 ws-calc.
          05 ws-calc-tax                pic 9999v99.
       *
-       
-       
 
        01 ws-report-title-line.
          05 filler                     pic x(25)
