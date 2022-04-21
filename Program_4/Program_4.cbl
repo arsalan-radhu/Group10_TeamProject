@@ -21,9 +21,9 @@
               
        fd returns
               data record is returns-data
-              record contains 36 characters.
+              record contains 80 characters.
       *
-       01 report-line pic x(36).
+       
        
       *
        01 returns-data.
@@ -62,8 +62,8 @@
          05 il-sku-code                pic x(15).       
       *
        fd report-file
-              data record is report-print-line.
-       01 report-print-line pic x(80).       
+              data record is report-line.
+	   01 report-line pic x(80).      
       *
        working-storage section.
        
