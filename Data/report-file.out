@@ -1,0 +1,22 @@
+
+ RETURN REPORT                     PAGE  1
+Trans.      Trans.    Payment Store    Invoice   Sku            Tax Code        Amount    Type    Number   Number   Code           Owing
+R            24.99  CR      01     -500102FL W8H4FW8H4FWF4       3.25
+R            24.99  CR      01     -200102FL W8H4FW8H4FWF4       3.25
+R            29.99  DB      01     -230107WI 8HRW8H43FJSHF       3.90
+R            89.99  CR      01     -260110WI 8HRW8H43FJSHF      11.70
+R            24.99  CR      02     -390102FL W8H4FW8H4FWF4       3.25
+R            29.99  CA      02     -510035SD FSKJ84MS09123       3.90
+R            20.00  CA      02     -560215SD FSKJ84MS09123       2.60
+R            24.99  CR      02     -630202FL W8H4FW8H4FWF4       3.25
+R           124.99  CR      02     -740322F4 WO8JFO8W4JFW8      16.25
+R            89.99  CR      04     -101510WI 8HRW8H43FJSHF      11.70
+R            20.00  CA      04     -107515SD FSKJ84MS09123       2.60
+R            24.99  CR      05     -114502FL W8H4FW8H4FWF4       3.25
+R            29.99  CA      12     -126635SD FSKJ84MS09123       3.90
+R            24.99  CR      12     -130612AS EDRFT987KIMYT       3.25
+R            24.99  CR      12     -138602FL W8H4FW8H4FWF4       3.25
+
+ TOTAL RETURNS:                             TOTAL AMOUNTS
+
+TOTAL TAX OWNED

@@ -91,7 +91,7 @@
            value                       " RETURN REPORT".
          05 filler                     pic x(10) value spaces.
          05 filler                     pic x(4) value "PAGE".
-         05 ws-title-page-name         pic zz9.
+         05 ws-current-pg-num         pic zz9.
 
       *
        01 ws-page-heading.
@@ -104,17 +104,17 @@
 	     05 filler				       pic x value spaces.
          05 filler                     pic x(5) value "Store".
          05 filler                     pic x(4) value spaces.
-         05 filler                     pic x(7) value "Invoice".
-         05 filler                     pic x(2) value spaces.
+         05 filler                     pic x(9) value "Invoice".
+         05 filler                     pic x(3) value spaces.
          05 filler                     pic x(3) value "Sku".
          05 filler                     pic x(12) value spaces.
          05 filler                     pic x(3) value "Tax".
          05 filler                     pic x(5) value spaces.
 
 	   01 ws-column-heading-2.
-         05 filler                     pic x(2) value spaces.
+         05 filler                     pic x(1) value spaces.
 		 05 filler				       pic x(4) value "Code".
-         05 filler                     pic x(5) value spaces.
+         05 filler                     pic x(8) value spaces.
 		 05 filler				       pic x(6) value"Amount".
          05 filler                     pic x(4) value spaces.
 		 05 filler				       pic x(4) value "Type".
@@ -129,7 +129,6 @@
          05 filler                     pic x(3) value spaces.
       *
        01 ws-detail-line.
-         05 filler                     pic x(2) value spaces.
          05 ws-dl-trans-code           pic x.
          05 filler                     pic x(8) value spaces.
          05 ws-dl-trans-amount         pic Zz,zz9.99.
@@ -137,7 +136,7 @@
          05 ws-dl-pay-type             pic xx.
          05 filler                     pic x(6) value spaces.
          05 ws-dl-store-num            pic xx.
-         05 filler                     pic x(7) value spaces.
+         05 filler                     pic x(5) value spaces.
          05 ws-dl-invoice-num          pic x(9).
          05 filler                     pic x value spaces.
          05 ws-dl-sku-code             pic x(15).
@@ -176,10 +175,7 @@
        
        77 ws-line-count                  pic 99 value 0.
        77 ws-lines-per-page          pic 99 value 20.
-	   77 ws-current-pg-num		 pic 99 value 1.
 									   
-                                      
-                                      
       *       
        01 ws-calculations.
          05 ws-tax-owned pic 9(5)v99.
@@ -196,7 +192,8 @@
                    move ws-true-const to ws-eof-flag.
            perform 100-print-headers.
 
-         perform  200-process-record
+		   perform  200-process-record until ws-eof-flag = 
+           ws-true-const.
 
          perform 800-print-summary.
            close returns,
@@ -206,14 +203,10 @@
 
        
        100-print-headers.
-           write report-line from ws-page-heading.
            perform 150-print-column-headers.
       *
        150-print-column-headers.
       *Increment page values
-           add ws-one to ws-page-num.
-           move ws-page-num to ws-current-pg-num.
-      * Increment page values
            add ws-one to ws-page-num.
            move ws-page-num to ws-current-pg-num.
       *Print Headings
@@ -278,7 +271,14 @@
       
 	   800-print-summary.
 
+           write report-line from spaces.
 
+           write report-line from ws-summary-return-line.
+           write report-line from spaces.
+           write report-line from ws-summary-total-tax-owned.
+           
+      *    close report-file, returns
+           
 
 
        end program Program_4.
