@@ -125,8 +125,21 @@
          05 filler                     pic x value spaces.
          05 ws-dl-tax-owing            pic Z,zz9.99 value spaces.
 
-       01 ws-summary-return-for-store1.
-         05 ws-
+       01 ws-summary-returns-for-store.
+
+         05 ws-summary-returns-for-store1.
+         05 filler pic x(3) value spaces.
+         05 ws-summary-returns-for-store2
+         05 filler pic x(3) value spaces.
+         05 ws-summary-returns-for-store3
+         05 filler pic x(3) value spaces.
+         05 ws-summary-returns-for-store4
+         05 filler pic x(3) value spaces.
+         05 ws-summary-returns-for-store5
+         05 filler pic x(3) value spaces.
+         05 ws-summary-returns-for-store6
+         05 filler pic x(3) value spaces.
+                
 
        01 ws-summary-return-line.
          05 filler                     pic x(35)
@@ -134,7 +147,19 @@
          05 ws-ret-line-total          pic z(7)9.
          05 filler                     pic x(15) value " TOTAL AMOUNTS".
          05 ws-ret-line-amount         pic $z(10)9.99.
+      *
+       01 ws-summary-total-tax-owned.
+         05 fille                      pic x(25)
+           value                       "TOTAL TAX OWNED       ".
+         05 ws-sum-tot-t-amount        pic $z(11)9.99.
 
+      *
+       77 ws-current-page              pic 99 value 1.
+       77 ws-line-count                pic 99 value 0.
+       77 ws-lines-per-page            pic 99 value 20.
+      
+     
+      *       
        01 ws-calculations.
          05 ws-tax-owned pic 9(5)v99.
          
