@@ -37,18 +37,41 @@
            88 il-return-transac-88
                                        value 'R'.
          05 il-transaction-amount      pic 9(5)v99.
-         05 in-pay-type                pic x(2).
+         05 il-payment-type pic xx.
+           88 il-payment-cash-88
+                       value 'CA'.
+           88 il-payment-credit-88
+                       value 'CR'.
+           88 il-payment-debit-88
+                       value 'DB'.
+         05 il-store-number pic xx.
+           88 il-store-01-88
+                       value '01'.
+           88 il-store-02-88
+                       value '02'.
+           88 il-store-03-88
+                       value '03'.
+           88 il-store-04-88
+                       value '04'.
+           88 il-store-05-88
+                       value '05'.
+           88 il-store-12-88
+                       value '12'.
+         05 in-payment-type            pic x(2).
          05 il-invoice-number          pic x(9).
          05 il-sku-code                pic x(15).       
       *
        fd report-file
               data record is report-print-line.
-       01 report-print-line pic x(80).
-       
+       01 report-print-line pic x(80).       
       *
        working-storage section.
        
-       
+       01 ws-page-count.
+         05 ws-page-records            pic 99 value 0.
+           88 ws-page-full             value 20.
+         05 ws-page-num                pic 99 value 0.
+         05 ws-total-records           pic 99.
        01 ws-boolean-const.
          05 ws-true-const              pic x value "Y".
          05 ws-false-const             pic x value "N".
@@ -57,10 +80,8 @@
        77 ws-one                       pic 9 value 1.
        77 ws-zero                      pic 9 value 0.
        77 ws-trans-percent	           pic 9v999 value 0.13.
-        77 ws-hundred                  pic 999 value 100.
-
-       77 ws-trans-percent	           pic 9v999 value 0.13.
-
+       77 ws-hundred                   pic 999 value 100.
+       
        01 ws-calc.
          05 ws-calc-tax                pic 9999v99.
       *
@@ -68,9 +89,9 @@
        01 ws-report-title-line.
          05 filler                     pic x(25)
            value                       " RETURN REPORT".
-         05 filler pic x(10) value spaces.
-         05 filler pic x(4) value "PAGE".
-         05 ws-title-page-name pic zz9.
+         05 filler                     pic x(10) value spaces.
+         05 filler                     pic x(4) value "PAGE".
+         05 ws-title-page-name         pic zz9.
 
       *
        01 ws-page-heading.
@@ -81,7 +102,7 @@
 		 05 filler				       pic x(7)
            value                       "Payment".
 	     05 filler				       pic x value spaces.
-		 05 filler				       pic x(5) value  "Store".
+         05 filler                     pic x(5) value "Store".
          05 filler                     pic x(4) value spaces.
          05 filler                     pic x(7) value "Invoice".
          05 filler                     pic x(2) value spaces.
@@ -93,19 +114,19 @@
 	   01 ws-column-heading-2.
          05 filler                     pic x(2) value spaces.
 		 05 filler				       pic x(4) value "Code".
-		 05 filler				       pic x(5) value spaces.
+         05 filler                     pic x(5) value spaces.
 		 05 filler				       pic x(6) value"Amount".
          05 filler                     pic x(4) value spaces.
 		 05 filler				       pic x(4) value "Type".
          05 filler                     pic x(4) value spaces.
          05 filler                     pic x(6) value "Number".
 		 05 filler				       pic x(3) value spaces.
-		 05 filler				       pic x(6) value "Number".
+         05 filler                     pic x(6) value "Number".
          05 filler                     pic x(3) value spaces.
          05 filler                     pic x(4) value "Code".
          05 filler                     pic x(11) value spaces.
          05 filler                     pic x(5) value "Owing".
-		 05 filler				       pic x(3) value spaces.
+         05 filler                     pic x(3) value spaces.
       *
        01 ws-detail-line.
          05 filler                     pic x(2) value spaces.
@@ -125,18 +146,18 @@
 
        01 ws-summary-returns-for-store.
 
-         05 ws-summary-returns-for-store1.
-         05 filler pic x(3) value spaces.
-         05 ws-summary-returns-for-store2
-         05 filler pic x(3) value spaces.
-         05 ws-summary-returns-for-store3
-         05 filler pic x(3) value spaces.
-         05 ws-summary-returns-for-store4
-         05 filler pic x(3) value spaces.
-         05 ws-summary-returns-for-store5
-         05 filler pic x(3) value spaces.
-         05 ws-summary-returns-for-store6
-         05 filler pic x(3) value spaces.
+         05 ws-summary-returns-for-store1  pic x(5).
+         05 filler                         pic x(3) value spaces.
+         05 ws-summary-returns-for-store2  pic x(5).
+         05 filler                         pic x(3) value spaces.
+         05 ws-summary-returns-for-store3  pic x(5).
+         05 filler                         pic x(3) value spaces.
+         05 ws-summary-returns-for-store4  pic x(5).
+         05 filler                         pic x(3) value spaces.
+         05 ws-summary-returns-for-store5  pic x(5).
+         05 filler                         pic x(3) value spaces.
+         05 ws-summary-returns-for-store6  pic x(5).
+         05 filler                         pic x(3) value spaces.
                 
 
        01 ws-summary-return-line.
@@ -147,25 +168,117 @@
          05 ws-ret-line-amount         pic $z(10)9.99.
       *
        01 ws-summary-total-tax-owned.
-         05 fille                      pic x(25)
+         05 filler                      pic x(25)
            value                       "TOTAL TAX OWNED       ".
          05 ws-sum-tot-t-amount        pic $z(11)9.99.
 
       *
-       77 ws-current-page              pic 99 value 1.
-       77 ws-line-count                pic 99 value 0.
-       77 ws-lines-per-page            pic 99 value 20.
-      
-     
+       
+       77 ws-line-count                  pic 99 value 0.
+       77 ws-lines-per-page          pic 99 value 20.
+	   77 ws-current-pg-num		 pic 99 value 1.
+									   
+                                      
+                                      
       *       
        01 ws-calculations.
          05 ws-tax-owned pic 9(5)v99.
-         
-         
-         
-              
+
        procedure division.
+      *
+           move ws-false-const to ws-eof-flag.
+
+           open input returns,
+             output report-file.
+       
+		   read  returns
+               at end
+                   move ws-true-const to ws-eof-flag.
+           perform 100-print-headers.
+
+         perform  200-process-record
+
+         perform 800-print-summary.
+           close returns,
+             report-file.
 
            goback.
+
+       
+       100-print-headers.
+           write report-line from ws-page-heading.
+           perform 150-print-column-headers.
+      *
+       150-print-column-headers.
+      *Increment page values
+           add ws-one to ws-page-num.
+           move ws-page-num to ws-current-pg-num.
+      * Increment page values
+           add ws-one to ws-page-num.
+           move ws-page-num to ws-current-pg-num.
+      *Print Headings
+           write report-line from ws-report-title-line after advancing
+             ws-one line.
+           write report-line from ws-page-heading
+             after advancing ws-one line.
+           write report-line from ws-column-heading-2.
+
+       200-process-record.
+
+           perform 300-calculate-transaction-amount.
+           perform 600-process-transaction-code.
+           perform 700-print-detail-line.
+
+           if ws-page-full then
+               perform 250-page-full
+           end-if
+
+           read returns
+               at end
+                   move ws-true-const to ws-eof-flag.
+
+       250-page-full.
+           write report-line from spaces after advancing page.
+           perform 150-print-column-headers.
+           move ws-zero to ws-page-records.
+	   300-calculate-transaction-amount.
+		   compute ws-calc-tax rounded = ws-trans-percent *
+			 il-transaction-amount.
+		   add ws-calc-tax to  ws-tax-owned.
+
+	   600-process-transaction-code.
+
+       700-print-detail-line.
+
+      *    Move the neccessary values to detail line
+           move il-transaction-code
+             to ws-dl-trans-code.
+           move il-invoice-number
+             to ws-dl-invoice-num.
+           move il-transaction-amount
+             to ws-dl-trans-amount.
+           move il-store-number
+             to ws-dl-store-num.
+           move il-sku-code
+             to ws-dl-sku-code.
+           move il-payment-type
+             to ws-dl-pay-type.
+           move ws-calc-tax
+             to ws-dl-tax-owing.
+      *Print detail line
+           write report-line from ws-detail-line.
+
+       
+      * Update page values
+           add ws-one
+             to ws-page-records.
+           add ws-one
+             to ws-total-records.
+             
+      
+	   800-print-summary.
+
+
+
 
        end program Program_4.

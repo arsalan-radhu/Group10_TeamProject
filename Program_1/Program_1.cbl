@@ -20,12 +20,12 @@
 
       *    Invalid records go here.
            select invalid-file
-           assign to "../../../../Data/invalid.dat"
+           assign to "../../../../Data/errors.dat"
            organization is line sequential.
 
       *    Invalid records to be formatted as a report go here.
            select invalid-report
-           assign to "../../../../Data/invalid.out"
+           assign to "../../../../Data/errors.out"
            organization is line sequential.
 
        data division.
